@@ -18,13 +18,28 @@ Base.metadata.create_all(engine)
 
 # Création d'une session
 session = Session(bind=engine)
-# Création d'un utilisateur
-toto = Users(name="toto")
-fr = Pays(pays="france")
-p1 = Prix(prix=10)
 
-# Insertion de l'utilisateur 
-session.add(toto)
-session.add(fr)
-session.add(p1)
+# Ajouter des pays
+pays_france = Pays(pays="France")
+pays_espagne = Pays(pays="Espagne")
+
+# Ajouter des utilisateurs
+utilisateur_1 = Users(name="Sasuke", pays=pays_france)
+utilisateur_2 = Users(name="Naruto", pays=pays_espagne)
+
+# Ajouter les objets à la session
+session.add(pays_france)
+session.add(pays_espagne)
+session.add(utilisateur_1)
+session.add(utilisateur_2)
+
+# Sauvegarder les modifications
 session.commit()
+
+# Lire tous les utilisateurs avec leurs pays
+utilisateurs = session.query(Users).all()
+for utilisateur in utilisateurs:
+    print(f"Nom : {utilisateur.name}, Pays : {utilisateur.pays.pays}")
+
+# Fermer la session après utilisation
+session.close()
